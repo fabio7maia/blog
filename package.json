@@ -1,5 +1,5 @@
 {
-  "name": "astro-blog",
+  "name": "@fabio7maia/blog",
   "type": "module",
   "version": "0.0.1",
   "scripts": {
@@ -27,7 +27,8 @@
     "react-syntax-highlighter": "^15.5.0",
     "rehype-raw": "^7.0.0",
     "remark-gfm": "^4.0.0",
-    "typescript": "^5.3.3"
+    "typescript": "^5.3.3",
+    "zod": "^3.22.4"
   },
   "devDependencies": {
     "@types/react-syntax-highlighter": "^15.5.11"
