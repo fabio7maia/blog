@@ -4,7 +4,7 @@ import Footer from "../../components/Footer.astro";
 import Header from "../../components/Header.astro";
 import { SITE_DESCRIPTION, SITE_TITLE } from "../../consts";
 // import { getCollection } from 'astro:content';
-import FormattedDate from "../../components/FormattedDate.astro";
+import { FormattedDate } from "../../components/FormattedDate";
 import { supabase } from "../../lib/supabase";
 
 // const posts = (await getCollection('blog')).sort(
@@ -111,9 +111,9 @@ const posts = postsRes || [];
             posts.map((post) => (
               <li>
                 <a
-                  href={`/blog/${post.id}-${post.title
+                  href={`/blog/${post.title
                     .replaceAll(" ", "-")
-                    .toLowerCase()}/`}
+                    .toLowerCase()}`}
                 >
                   <img
                     width={720}

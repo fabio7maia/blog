@@ -1,20 +1,28 @@
 ---
-import { type CollectionEntry, getCollection } from 'astro:content';
-import BlogPost from '../../layouts/BlogPost.astro';
+import Post from "../../components/Post";
+import BlogPost from "../../layouts/BlogPost.astro";
+import { supabase } from "../../lib/supabase";
+
+export const prerender = true;
 
 export async function getStaticPaths() {
-	const posts = await getCollection('blog');
-	return posts.map((post) => ({
-		params: { slug: post.slug },
-		props: post,
-	}));
+  const { data: posts } = await supabase.from("posts").select();
+
+  //   console.log("posts", { posts });
+
+  return posts?.map((post) => ({
+    params: {
+      slug: `${post.title.replaceAll(" ", "-").toLowerCase()}`,
+    },
+    props: post,
+  }));
 }
-type Props = CollectionEntry<'blog'>;
 
 const post = Astro.props;
-const { Content } = await post.render();
+
+// console.log("post", { post });
 ---
 
-<BlogPost {...post.data}>
-	<Content />
+<BlogPost {...post}>
+  <Post {...post} />
 </BlogPost>

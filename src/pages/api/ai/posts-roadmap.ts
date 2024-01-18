@@ -140,16 +140,16 @@ export const POST: APIRoute = async ({ request }) => {
                 )
             : undefined;
 
-          console.log("POST [/api/ai/posts-roadmap] > post", {
-            technology,
-            size,
-            i,
-            term,
-            description,
-            post,
-            imageGenerated: !!image,
-            imageUploaded: imageUploadRes?.data?.path,
-          });
+          // console.log("POST [/api/ai/posts-roadmap] > post", {
+          //   technology,
+          //   size,
+          //   i,
+          //   term,
+          //   description,
+          //   post,
+          //   imageGenerated: !!image,
+          //   imageUploaded: imageUploadRes?.data?.path,
+          // });
 
           await supabase.from("posts").insert({
             roadmapId: roadmapId,
