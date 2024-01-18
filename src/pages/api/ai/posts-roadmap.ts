@@ -1,4 +1,5 @@
 import type { APIRoute } from "astro";
+import { decode } from "base64-arraybuffer";
 import type {
   ChatCompletion,
   ImagesResponse,
@@ -12,7 +13,24 @@ export const POST: APIRoute = async ({ request }) => {
   const formData = await request.formData();
   const technology = formData.get("technology");
 
-  // console.log("POST [/api/ai/posts-roadmap] > start", { technology });
+  // const { created, data } = await openai.images.generate({
+  //   prompt: `Imagem para colocar num blog que permita expressar o tópico Componentes - Componentes da tecnologia ${technology}`,
+  //   model: "dall-e-3",
+  //   n: 1,
+  //   response_format: "b64_json",
+  // });
+
+  // console.log("POST [/api/ai/posts-roadmap] > start", {
+  //   technology,
+  //   image: data?.[0]?.b64_json,
+  // });
+
+  // return new Response(
+  //   JSON.stringify({
+  //     status: "error",
+  //     data: "",
+  //   })
+  // );
 
   try {
     const { data, error }: any = await supabase
@@ -30,6 +48,7 @@ export const POST: APIRoute = async ({ request }) => {
       );
     }
 
+    const roadmapId = data?.[0]?.id;
     const roadmap = data?.[0]?.roadmap
       ? JSON.parse(data?.[0]?.roadmap)
       : undefined;
@@ -96,8 +115,9 @@ export const POST: APIRoute = async ({ request }) => {
             promises.push(
               openai.images.generate({
                 prompt: `Imagem para colocar num blog que permita expressar o tópico ${term} - ${description} da tecnologia ${technology}`,
-                model: "dall-e-2",
+                model: "dall-e-3",
                 n: 1,
+                response_format: "b64_json",
               })
             );
           }
@@ -108,7 +128,17 @@ export const POST: APIRoute = async ({ request }) => {
           ];
 
           const post = postRes?.choices?.[0]?.message?.content;
-          const image = imageRes ? imageRes?.data?.[0].url : undefined;
+          const image = imageRes ? imageRes?.data?.[0].b64_json : undefined;
+
+          const imageUploadRes = image
+            ? await supabase.storage
+                .from("post-images")
+                .upload(
+                  `public/post-image-${roadmapId}-${technology}-${term}`,
+                  decode(image),
+                  { contentType: "image/png", upsert: true }
+                )
+            : undefined;
 
           console.log("POST [/api/ai/posts-roadmap] > post", {
             technology,
@@ -117,17 +147,18 @@ export const POST: APIRoute = async ({ request }) => {
             term,
             description,
             post,
-            image,
+            imageGenerated: !!image,
+            imageUploaded: imageUploadRes?.data?.path,
           });
 
           await supabase.from("posts").insert({
-            roadmapId: roadmap.id,
+            roadmapId: roadmapId,
             title: `${technology} - ${term}`,
             content: post,
             technology,
             author: "AI",
             status: "CREATED",
-            image: image,
+            image: imageUploadRes?.data?.path,
           });
 
           resolve();
