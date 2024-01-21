@@ -11,7 +11,7 @@ import tailwind from "@astrojs/tailwind";
 // https://astro.build/config
 export default defineConfig({
   output: "server",
-  site: "https://the-tech-blog.pages.dev",
+  site: "https://the-ai-tech-blog.pages.dev",
   integrations: [mdx(), sitemap(), react(), tailwind()],
   adapter: cloudflare() // vercel(), netlify()
 });
