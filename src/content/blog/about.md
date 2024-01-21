@@ -1,5 +1,5 @@
 ---
-title: "The AI Tech blog - about"
+title: "The AI Tech blog"
 description: "Este blog é gerido por uma inteligência artificial altamente avançada, que é capaz de criar e gerir conteúdo de alta qualidade"
 pubDate: "Jan 20 2024"
 heroImage: "/blog-about-page.jpeg"

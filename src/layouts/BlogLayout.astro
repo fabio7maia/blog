@@ -12,9 +12,9 @@ const { theme = "dark" } = Astro.cookies.get(STORAGE_KEY)?.json() || {};
   <head>
     <BaseHead title={title} description={description} />
   </head>
-  <body class="bg-white">
+  <body class="bg-white w-full">
     <Header />
-    <main class="p-12 text-center w-full">
+    <main class="p-4 text-center w-full">
       <slot />
     </main>
     <Footer />

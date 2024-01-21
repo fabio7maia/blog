@@ -79,9 +79,11 @@ const posts = postsRes || [];
                   />
                 </div>
                 <div class="py-8 prose">
-                  <h2 class="text-neutral">{post.title}</h2>
+                  <h2 class="break-all sm:break-normal text-neutral">
+                    {post.title}
+                  </h2>
 
-                  <p class="text-neutral-content">
+                  <p class="text-secondary">
                     <FormattedDate date={new Date(post.created_at)} />
                   </p>
                 </div>

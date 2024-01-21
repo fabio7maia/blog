@@ -1,3 +1,4 @@
+import { CalendarIcon, ClockIcon } from "@heroicons/react/24/solid";
 import Markdown from "react-markdown";
 import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
 import { dracula } from "react-syntax-highlighter/dist/cjs/styles/prism";
@@ -29,6 +30,7 @@ export default function Post({
   updatedDate,
   isAboutPage = false,
   children,
+  timeToRead,
 }: any) {
   log({
     image,
@@ -58,18 +60,32 @@ export default function Post({
           />
         </div>
         <div className="pt-8 prose">
-          <h1 className="font-black text-5xl text-primary">{title}</h1>
+          <h1 className="font-black text-5xl text-primary break-all sm:break-normal ">
+            {title}
+          </h1>
 
-          {created_at && (
-            <p className="text-accent">
-              {created_at && <FormattedDate date={new Date(created_at)} />}
-              {updatedDate && (
-                <div className="last-updated-on">
-                  Last updated on <FormattedDate date={updatedDate} />
-                </div>
-              )}
-            </p>
-          )}
+          <div className="flex justify-between">
+            {created_at && (
+              <div className="flex items-center justify-center text-accent">
+                {created_at && (
+                  <>
+                    <CalendarIcon height={32} className="pr-2" />
+                    <FormattedDate date={new Date(created_at)} />
+                  </>
+                )}
+              </div>
+            )}
+            {timeToRead && (
+              <div className="flex items-center justify-center text-accent">
+                {created_at && (
+                  <>
+                    {timeToRead} min
+                    <ClockIcon height={32} className="pl-2" />
+                  </>
+                )}
+              </div>
+            )}
+          </div>
 
           {tags && (
             <p>
@@ -87,7 +103,7 @@ export default function Post({
 
         <div className="divider" />
 
-        <div className="prose pt-8">
+        <div className="prose pt-8 w-full">
           {children ? (
             children
           ) : (
