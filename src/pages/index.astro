@@ -1,50 +1,95 @@
 ---
-import BaseHead from '../components/BaseHead.astro';
-import Header from '../components/Header.astro';
-import Footer from '../components/Footer.astro';
-import { SITE_TITLE, SITE_DESCRIPTION } from '../consts';
+// import { getCollection } from 'astro:content';
+import { FormattedDate } from "../components/FormattedDate";
+import { MASKS } from "../components/Post";
+import { LoggerHelper } from "../helpers/logger";
+import { TextHelper } from "../helpers/text";
+import BlogLayout from "../layouts/BlogLayout.astro";
+import { supabase } from "../lib/supabase";
+
+// const posts = (await getCollection('blog')).sort(
+// 	(a, b) => a.data.pubDate.valueOf() - b.data.pubDate.valueOf()
+// );
+
+const { log } = LoggerHelper.factory("pages/index");
+
+const { data: postsRes } = await supabase.from("posts").select();
+
+log("postsRes", { postsRes });
+
+// const publicUrlImages = postsRes?.map((x) => x.image);
+
+// const imagesRes = publicUrlImages
+//   ? await supabase.storage
+//       .from("post-images")
+//       .createSignedUrls(publicUrlImages, 60 * 5)
+//   : undefined;
+
+// const images = imagesRes ? imagesRes.data || [] : [];
+
+// <a href={TextHelper.transformToUrl(post.title)}>
+//                   <img
+//                     src={`https://mkyplcxzkcdafyrdcqnp.supabase.co/storage/v1/object/public/post-images/${post.image}`}
+//                     alt="post-image"
+//                   />
+//                   <h2 class="title">{post.title}</h2>
+//                   <p class="date">
+//                     <FormattedDate date={new Date(post.created_at)} />
+//                   </p>
+//                 </a>
+
+// <div
+//   class="hero"
+//   style={`background-image: url(https://mkyplcxzkcdafyrdcqnp.supabase.co/storage/v1/object/public/post-images/${post.image});`}
+// >
+//   <div class="hero-overlay bg-opacity-80" />
+//   <div class="hero-content text-center text-neutral-content">
+//     <div class="max-w-md">
+//       <h3 class="mb-5 text-5xl font-bold">{post.title}</h3>
+//       <p class="date">
+//         <FormattedDate date={new Date(post.created_at)} />
+//       </p>
+//     </div>
+//   </div>
+// </div>
+
+const posts = postsRes || [];
 ---
 
-<!doctype html>
-<html lang="en">
-	<head>
-		<BaseHead title={SITE_TITLE} description={SITE_DESCRIPTION} />
-	</head>
-	<body>
-		<Header title={SITE_TITLE} />
-		<main>
-			<h1>🧑‍🚀 Hello, Astronaut!</h1>
-			<p>
-				Welcome to the official <a href="https://astro.build/">Astro</a> blog starter template. This
-				template serves as a lightweight, minimally-styled starting point for anyone looking to
-				build a personal website, blog, or portfolio with Astro.
-			</p>
-			<p>
-				This template comes with a few integrations already configured in your
-				<code>astro.config.mjs</code> file. You can customize your setup with
-				<a href="https://astro.build/integrations">Astro Integrations</a> to add tools like
-				Tailwind, React, or Vue to your project.
-			</p>
-			<p>Here are a few ideas on how to get started with the template:</p>
-			<ul>
-				<li>Edit this page in <code>src/pages/index.astro</code></li>
-				<li>Edit the site header items in <code>src/components/Header.astro</code></li>
-				<li>Add your name to the footer in <code>src/components/Footer.astro</code></li>
-				<li>Check out the included blog posts in <code>src/pages/blog/</code></li>
-				<li>Customize the blog post page layout in <code>src/layouts/BlogPost.astro</code></li>
-			</ul>
-			<p>
-				Have fun! If you get stuck, remember to <a href="https://docs.astro.build/"
-					>read the docs
-				</a> or <a href="https://astro.build/chat">join us on Discord</a> to ask questions.
-			</p>
-			<p>
-				Looking for a blog template with a bit more personality? Check out <a
-					href="https://github.com/Charca/astro-blog-template"
-					>astro-blog-template
-				</a> by <a href="https://twitter.com/Charca">Maxi Ferreira</a>.
-			</p>
-		</main>
-		<Footer />
-	</body>
-</html>
+<BlogLayout>
+  <section>
+    <ul class="grid grid-cols-2 gap-4">
+      {
+        posts.map((post, index) => (
+          <li class={`${index === 0 ? "col-span-2" : undefined}`}>
+            <a href={TextHelper.transformToUrl(post.title)}>
+              <div class="flex flex-col justify-center items-center">
+                <div
+                  class={`w-3/4 mask ${
+                    MASKS[Math.floor(Math.random() * MASKS.length)]
+                  }`}
+                >
+                  <img
+                    src={
+                      post.image
+                        ? `https://mkyplcxzkcdafyrdcqnp.supabase.co/storage/v1/object/public/post-images/${post.image}`
+                        : "/blog-placeholder-image.jpeg"
+                    }
+                    alt="post-image"
+                  />
+                </div>
+                <div class="py-8 prose">
+                  <h2 class="text-neutral">{post.title}</h2>
+
+                  <p class="text-neutral-content">
+                    <FormattedDate date={new Date(post.created_at)} />
+                  </p>
+                </div>
+              </div>
+            </a>
+          </li>
+        ))
+      }
+    </ul>
+  </section>
+</BlogLayout>

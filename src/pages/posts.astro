@@ -2,7 +2,7 @@
 import BaseHead from "../components/BaseHead.astro";
 import Footer from "../components/Footer.astro";
 import Header from "../components/Header.astro";
-import Roadmap2 from "../components/Roadmap";
+import PostsGenerate from "../components/PostsGenerate";
 import { SITE_DESCRIPTION, SITE_TITLE } from "../consts";
 ---
 
@@ -13,9 +13,9 @@ import { SITE_DESCRIPTION, SITE_TITLE } from "../consts";
   </head>
   <body>
     <Header title={SITE_TITLE} />
-    <main>
-      <h1>Road map!</h1>
-      <Roadmap2 client:only="react" />
+    <main class="prose">
+      <h1>Generate Posts</h1>
+      <PostsGenerate client:only="react" />
     </main>
     <Footer />
   </body>

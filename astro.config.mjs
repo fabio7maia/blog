@@ -6,10 +6,12 @@ import { defineConfig } from "astro/config";
 // import netlify from "@astrojs/netlify";
 import cloudflare from "@astrojs/cloudflare";
 
+import tailwind from "@astrojs/tailwind";
+
 // https://astro.build/config
 export default defineConfig({
   output: "server",
   site: "https://the-tech-blog.pages.dev",
-  integrations: [mdx(), sitemap(), react()],
-  adapter: cloudflare(), // vercel(), netlify()
+  integrations: [mdx(), sitemap(), react(), tailwind()],
+  adapter: cloudflare() // vercel(), netlify()
 });

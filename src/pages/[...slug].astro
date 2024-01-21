@@ -1,0 +1,32 @@
+---
+import Post from "../components/Post";
+import { LoggerHelper } from "../helpers/logger";
+import { TextHelper } from "../helpers/text";
+import BlogLayout from "../layouts/BlogLayout.astro";
+import { supabase } from "../lib/supabase";
+
+export const prerender = true;
+
+const { log } = LoggerHelper.factory("pages/slug");
+
+export async function getStaticPaths() {
+  const { data: posts } = await supabase.from("posts").select();
+
+  //   LoggerHelper.log("posts", { posts });
+
+  return posts?.map((post) => ({
+    params: {
+      slug: TextHelper.transformToUrl(post.title),
+    },
+    props: post,
+  }));
+}
+
+const post = Astro.props;
+
+log("post", { post });
+---
+
+<BlogLayout {...post}>
+  <Post {...post} />
+</BlogLayout>

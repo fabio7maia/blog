@@ -1,6 +1,6 @@
 import React from "react";
 
-export default function PostsRoadmap() {
+export default function RoadmapsGenerate() {
   const [isFetching, setIsFetching] = React.useState(false);
   const [responseMessage, setResponseMessage] = React.useState<{
     status: "none" | "success" | "error";
@@ -17,7 +17,7 @@ export default function PostsRoadmap() {
       setIsFetching(true);
 
       const formData = new FormData(e.target as HTMLFormElement);
-      const response = await fetch("/api/ai/posts-roadmap", {
+      const response = await fetch("/api/ai/roadmaps", {
         method: "POST",
         body: formData,
       });
@@ -35,11 +35,21 @@ export default function PostsRoadmap() {
     <>
       <form onSubmit={handleOnSubmit}>
         <div>
+          <label htmlFor="model">Model</label>
+          <br />
+          <select name="model" required>
+            <option value="old">Old</option>
+            <option value="new">New</option>
+          </select>
+          <br />
           <label htmlFor="technology">Technology</label>
           <br />
           <input type="text" id="technology" name="technology" required />
         </div>
-        <button disabled={isFetching}>Submit {isFetching && "..."}</button>
+        <br />
+        <button className="btn btn-primary" disabled={isFetching}>
+          Submit {isFetching && "..."}
+        </button>
       </form>
       <br />
       <br />
