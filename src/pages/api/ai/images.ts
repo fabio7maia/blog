@@ -46,7 +46,7 @@ export const POST: APIRoute = async ({ request }) => {
 
     for (let i = 0; i < size; i++) {
       promises.push(
-        new Promise(async (resolve, reject) => {
+        new Promise(async (resolve) => {
           log("images loop", {
             size,
             data,

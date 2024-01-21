@@ -72,7 +72,7 @@ export const POST: APIRoute = async ({ request }) => {
         totalPosts++;
 
         promises.push(
-          new Promise(async (resolve, reject) => {
+          new Promise(async (resolve) => {
             const roadmapTopic = roadmapContent[j];
 
             const topic = roadmapTopic.topic;
